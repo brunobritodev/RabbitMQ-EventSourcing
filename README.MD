@@ -1,7 +1,7 @@
-# ASP.NET Core - MongoDB Repository & Unit of Work Pattern
+# ASP.NET Core - Event Sourcing com Background Services e RabbitMQ
 <img src="https://www.brunobrito.net.br/content/images/2019/02/capa-social.jpg" width="480" />
 
-Example App - This demo shows how to simple implement repository and unit of work patterns for MongoDB .Net driver.
+Example App - This demo shows how to implement RabbitMQ and Event Sourcing. It shows how to keep an active connection with RabbitMQ through Background Services from ASP.NET Core.
 
 * **Server Side**: ASP.NET Core
 
@@ -12,8 +12,8 @@ Pre reqs
 Techs:
 
 * ASP.NET Core
-* Swagger
-* ServiceStack.Core
+* [EasyNetQ](http://easynetq.com/)
+* MongoDB
 
 # How to run
 
@@ -23,4 +23,4 @@ Techs:
   * docker-compose up --build
 
 
-More about on [ASP.NET Core - MongoDB Repository Pattern & Unit Of Work](https://www.brunobrito.net.br/aspnet-core-mongodb-unit-of-work/) - Portuguese only
+More about on [ASP.NET Core - Microsserviços e Event Sourcing com Background Services e RabbitMQ](https://www.brunobrito.net.br//) - Portuguese only
