@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Domain.Model.Payment>
+
+<table class="table table-bordered table-dark">
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Issue Network</td>
+            <td>Expiration</td>
+            <td>Number</td>
+            <td>Success</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.IssueNetwork</td>
+            <td>@item.Expiration</td>
+            <td>@item.Number</td>
+            <td>
+                @if(item.Success)
+                {
+                <span class="text-success">
+                    <i class="fas fa-check"></i>
+                </span>
+                }
+                else
+                {
+                <span class="text-danger">
+                    <i class="fas fa-times"></i>
+                </span>
+
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

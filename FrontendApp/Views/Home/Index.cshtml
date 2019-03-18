@@ -1,0 +1,83 @@
+﻿@model Domain.Model.Order
+@{
+    ViewData["Title"] = "Home Page";
+}
+@section Scripts{
+
+    <script type="text/javascript">
+
+        function getOrders() {
+            $.ajax(
+                {
+                    type: 'GET',
+                    url: '@Url.Action("GetOrders", "Home")',
+                    dataType: 'html',
+                    cache: false,
+                    async: true,
+                    success: function (data) {
+                        $('#ordersList').html(data);
+                    }
+                });
+        }
+
+        $(document).ready(function () {
+            $('#CreditCard_Expiration').inputmask("99/99");
+            $('#CreditCard_CardNumber').inputmask("9999 9999 9999 9999");
+            $('#Amount').inputmask("decimal");
+            $('#Quantity').inputmask("integer");
+            getOrders();
+            //setInterval(getOrders, 30000);
+        });
+
+    </script>
+}
+
+<div class="text-center">
+    <h1 class="display-4">Order Service</h1>
+    
+</div>
+<div class="row">
+    <div class="col-6">
+        <p>Below you can check all orders placed</p>
+        <div id="ordersList">
+        </div>
+    </div>
+    <div class="col-6">
+        <h3>Place new order</h3>
+        <form asp-action="SaveOrder">
+            <div class="form-group">
+                <label asp-for="Product"></label>
+                <input asp-for="Product" class="form-control" placeholder="Product" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity"></label>
+                <input asp-for="Quantity" class="form-control" placeholder="Quantity" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount"></label>
+                <input asp-for="Amount" class="form-control" placeholder="Amount" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CreditCard.CardNumber"></label>
+                <input asp-for="CreditCard.CardNumber" value="4847 7091 7920 7118" class="form-control" placeholder="Number" />
+                <a href="https://www.getcreditcardinfo.com/generatevisacreditcard.php" target="_blank">Generate new credit card</a>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreditCard.Name"></label>
+                <input asp-for="CreditCard.Name" value="Brooklyn Jackson" class="form-control" placeholder="Name" />
+            </div>
+            <div class="form-group">
+                <label asp-for="CreditCard.Expiration"></label>
+                <input asp-for="CreditCard.Expiration" value="03/27" class="form-control" placeholder="Expiration" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CreditCard.CVV"></label>
+                <input asp-for="CreditCard.CVV" class="form-control" value="726" placeholder="CVV" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>

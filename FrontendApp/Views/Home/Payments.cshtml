@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Payments";
+}
+@section Scripts{
+
+    <script type="text/javascript">
+
+        function getPayments() {
+            $.ajax(
+                {
+                    type: 'GET',
+                    url: '@Url.Action("GetPayments", "Home")',
+                    dataType: 'html',
+                    cache: false,
+                    async: true,
+                    success: function (data) {
+                        $('#paymentList').html(data);
+                    }
+                });
+        }
+
+        $(document).ready(function () {
+            getPayments();
+            //setInterval(getOrders, 30000);
+        });
+
+    </script>
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="text-center">
+    <h1 class="display-4">Payment Service</h1>
+    <p>Below all tried payments. At least 1 per Order</p>
+</div>
+
+
+<div class="row">
+    <div class="align-content-center col-12">
+        <div id="paymentList">
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Domain.Model.Order>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>Product</td>
+            <td>Quantity</td>
+            <td>Amount</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Product</td>
+                <td>@item.Quantity</td>
+                <td>@item.Amount</td>
+            </tr>
+        }
+    </tbody>
+</table>

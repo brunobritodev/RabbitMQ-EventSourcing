@@ -1,0 +1,72 @@
+# Use root/example as user/password credentials
+version: '3.1'
+services:
+
+  payment-service:
+      image: "payment-service"
+      build: 
+        context: .
+        dockerfile: PaymentService.Dockerfile
+      expose:
+          - "5016"
+      links:
+          - mongo-payment
+          - rabbitmq
+      depends_on:
+          - mongo-payment
+          - rabbitmq
+      environment: 
+          MONGOCONNECTION: "mongodb://mongo-payment:27017"
+          DATABASENAME: "Payments"
+          ASPNETCORE_ENVIRONMENT: "Development"
+          ASPNETCORE_URLS: http://+:5016
+          RABBITCONNECTION: host=rabbitmq
+
+
+  mongo-payment:
+      image: 'bitnami/mongodb:latest'
+      expose: 
+        - '27017'
+
+  order-service:
+      image: "order-service"
+      build: 
+        context: .
+        dockerfile: OrderService.Dockerfile
+      expose:
+          - "5015"
+      links:
+          - mongo-order
+          - rabbitmq
+      depends_on:
+          - mongo-order
+      environment: 
+          MONGOCONNECTION: "mongodb://mongo-order:27017"
+          DATABASENAME: "Orders"
+          ASPNETCORE_ENVIRONMENT: "Development"
+          ASPNETCORE_URLS: http://+:5015
+          RABBITCONNECTION: host=rabbitmq
+
+  mongo-order:
+      image: 'bitnami/mongodb:latest'
+      expose: 
+        - '27017'
+      
+  
+  frontend:
+      image: "frontend"
+      build: 
+        context: .
+        dockerfile: FrontEnd.Dockerfile
+      ports:
+          - "5020:5020"
+      environment: 
+          ASPNETCORE_ENVIRONMENT: "Development"
+          ASPNETCORE_URLS: http://+:5020
+          ORDERURI: "http://order-service:5015"
+          PAYMENTURI: "http://payment-service:5016"
+  
+  rabbitmq:
+      image: rabbitmq:management
+      expose:
+        - "5672"
