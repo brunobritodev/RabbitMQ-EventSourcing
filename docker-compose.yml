@@ -8,7 +8,7 @@ services:
         context: .
         dockerfile: PaymentService.Dockerfile
       expose:
-          - "5016"
+          - "9998"
       links:
           - mongo-payment
           - rabbitmq
@@ -19,8 +19,8 @@ services:
           MONGOCONNECTION: "mongodb://mongo-payment:27017"
           DATABASENAME: "Payments"
           ASPNETCORE_ENVIRONMENT: "Development"
-          ASPNETCORE_URLS: http://+:5016
-          RABBITCONNECTION: host=rabbitmq
+          ASPNETCORE_URLS: http://+:9998
+          RABBITCONNECTION: host=rabbitmq;timeout=90
 
 
   mongo-payment:
@@ -34,7 +34,7 @@ services:
         context: .
         dockerfile: OrderService.Dockerfile
       expose:
-          - "5015"
+          - "9999"
       links:
           - mongo-order
           - rabbitmq
@@ -44,7 +44,7 @@ services:
           MONGOCONNECTION: "mongodb://mongo-order:27017"
           DATABASENAME: "Orders"
           ASPNETCORE_ENVIRONMENT: "Development"
-          ASPNETCORE_URLS: http://+:5015
+          ASPNETCORE_URLS: http://+:9999
           RABBITCONNECTION: host=rabbitmq
 
   mongo-order:
@@ -63,10 +63,12 @@ services:
       environment: 
           ASPNETCORE_ENVIRONMENT: "Development"
           ASPNETCORE_URLS: http://+:5020
-          ORDERURI: "http://order-service:5015"
-          PAYMENTURI: "http://payment-service:5016"
+          ORDERURI: "http://order-service:9999"
+          PAYMENTURI: "http://payment-service:9998"
   
   rabbitmq:
-      image: rabbitmq:management
+      image: rabbitmq:3-management
       expose:
         - "5672"
+      ports:
+        - "8080:15672"
