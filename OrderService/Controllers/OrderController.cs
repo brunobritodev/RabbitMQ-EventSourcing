@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Domain.Events;
+﻿using Domain.Events;
 using Domain.Model;
 using EasyNetQ;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OrderService.Controllers
 {
@@ -19,15 +19,14 @@ namespace OrderService.Controllers
 
         public OrderController(IConfiguration configuration)
         {
-            var mongoClient = new MongoClient(Environment.GetEnvironmentVariable("MONGOCONNECTION") ?? _configuration.GetSection("MongoSettings").GetSection("Connection").Value);
-            _orderCollection = mongoClient.GetDatabase(Environment.GetEnvironmentVariable("DATABASENAME") ?? _configuration.GetSection("MongoSettings").GetSection("DatabaseName").Value).GetCollection<Order>("Orders");
             _configuration = configuration;
+            var mongoClient = new MongoClient(_configuration["MongoSettings:Connection"]);
+            _orderCollection = mongoClient.GetDatabase(_configuration["MongoSettings:DatabaseName"]).GetCollection<Order>("Orders");
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> Get()
         {
-
             var orders = await _orderCollection.FindAsync(Builders<Order>.Filter.Empty);
 
             return Ok(orders.ToList());
@@ -46,7 +45,7 @@ namespace OrderService.Controllers
                 bus.Publish(new OrderCreatedEvent(order.Id, order.CreditCard));
             }
 
-            return Ok(true);
+            return Ok();
         }
     }
 }

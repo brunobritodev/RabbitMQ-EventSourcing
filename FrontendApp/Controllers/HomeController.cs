@@ -1,11 +1,10 @@
-﻿using Domain.Model;
+﻿using Bogus;
+using Domain.Model;
 using FrontendApp.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Refit;
-using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
 namespace FrontendApp.Controllers
 {
@@ -19,7 +18,24 @@ namespace FrontendApp.Controllers
         }
         public IActionResult Index()
         {
-            return View("Index");
+            var faker = new Faker();
+           
+            var creditCard = new CreditCard()
+            {
+                CVV = faker.Finance.CreditCardCvv(),
+                CardNumber = faker.Finance.CreditCardNumber(),
+                Expiration = faker.Date.Future().ToString("MM/yyyy"),
+                Name = faker.Person.FullName
+            };
+            var order = new Order()
+            {
+                Amount = faker.Random.Number(500),
+                Quantity = faker.Random.Number(5),
+                Product = faker.Commerce.Product(),
+                CreditCard = creditCard
+
+            };
+            return View("Index", order);
         }
 
         public IActionResult Payments()
@@ -30,14 +46,14 @@ namespace FrontendApp.Controllers
         [HttpGet]
         public async Task<ActionResult> GetOrders()
         {
-            var service = RestService.For<IOrderService>(Environment.GetEnvironmentVariable("ORDERURI") ?? _configuration.GetSection("OrderURI").Value);
+            var service = RestService.For<IOrderService>(_configuration["OrderURI"]);
             return PartialView("_OrdersPartial", await service.GetOrders());
         }
 
         [HttpPost]
         public async Task<IActionResult> SaveOrder([FromForm] Order order)
         {
-            var service = RestService.For<IOrderService>(Environment.GetEnvironmentVariable("ORDERURI") ?? _configuration.GetSection("OrderURI").Value);
+            var service = RestService.For<IOrderService>(_configuration["OrderURI"]);
             await service.SaveOrders(order);
 
             return Index();
@@ -47,7 +63,7 @@ namespace FrontendApp.Controllers
         [HttpGet]
         public async Task<ActionResult> GetPayments()
         {
-            var paymentService = RestService.For<IPaymentService>(Environment.GetEnvironmentVariable("PAYMENTURI") ?? _configuration.GetSection("PaymentURI").Value);
+            var paymentService = RestService.For<IPaymentService>(_configuration["PaymentURI"]);
             return PartialView("_PaymentsPartial", await paymentService.GetPayments());
         }
     }

@@ -41,11 +41,11 @@ services:
       depends_on:
           - mongo-order
       environment: 
-          MONGOCONNECTION: "mongodb://mongo-order:27017"
-          DATABASENAME: "Orders"
+          MongoSettings__Connection: "mongodb://mongo-order:27017"
+          MongoSettings__DatabaseName: "Orders"
           ASPNETCORE_ENVIRONMENT: "Development"
           ASPNETCORE_URLS: http://+:9999
-          RABBITCONNECTION: host=rabbitmq
+          RabbitSettings__Connection: host=rabbitmq
 
   mongo-order:
       image: 'bitnami/mongodb:latest'
@@ -63,8 +63,8 @@ services:
       environment: 
           ASPNETCORE_ENVIRONMENT: "Development"
           ASPNETCORE_URLS: http://+:5020
-          ORDERURI: "http://order-service:9999"
-          PAYMENTURI: "http://payment-service:9998"
+          OrderURI: "http://order-service:9999"
+          PaymentURI: "http://payment-service:9998"
   
   rabbitmq:
       image: rabbitmq:3-management

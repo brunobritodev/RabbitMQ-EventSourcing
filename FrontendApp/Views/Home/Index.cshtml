@@ -34,7 +34,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Order Service</h1>
-    
+
 </div>
 <div class="row">
     <div class="col-6">
@@ -57,24 +57,25 @@
                 <label asp-for="Amount"></label>
                 <input asp-for="Amount" class="form-control" placeholder="Amount" />
             </div>
-
+            <hr />
+            <h4>Payment data:</h4>
             <div class="form-group">
                 <label asp-for="CreditCard.CardNumber"></label>
-                <input asp-for="CreditCard.CardNumber" value="4847 7091 7920 7118" class="form-control" placeholder="Number" />
+                <input asp-for="CreditCard.CardNumber" value="@Model.CreditCard.CardNumber" class="form-control" placeholder="Number" />
                 <a href="https://www.getcreditcardinfo.com/generatevisacreditcard.php" target="_blank">Generate new credit card</a>
             </div>
             <div class="form-group">
                 <label asp-for="CreditCard.Name"></label>
-                <input asp-for="CreditCard.Name" value="Brooklyn Jackson" class="form-control" placeholder="Name" />
+                <input asp-for="CreditCard.Name" value="@Model.CreditCard.Name" class="form-control" placeholder="Name" />
             </div>
             <div class="form-group">
                 <label asp-for="CreditCard.Expiration"></label>
-                <input asp-for="CreditCard.Expiration" value="03/27" class="form-control" placeholder="Expiration" />
+                <input asp-for="CreditCard.Expiration" value="@Model.CreditCard.Expiration" class="form-control" placeholder="Expiration" />
             </div>
 
             <div class="form-group">
                 <label asp-for="CreditCard.CVV"></label>
-                <input asp-for="CreditCard.CVV" class="form-control" value="726" placeholder="CVV" />
+                <input asp-for="CreditCard.CVV" class="form-control" value="@Model.CreditCard.CVV" placeholder="CVV" />
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

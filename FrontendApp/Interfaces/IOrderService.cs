@@ -11,6 +11,6 @@ namespace FrontendApp.Interfaces
         Task<List<Order>> GetOrders();
 
         [Post("/order")]
-        Task<bool> SaveOrders([Body] Order order);
+        Task SaveOrders([Body] Order order);
     }
 }
